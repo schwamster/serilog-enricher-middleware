@@ -1,0 +1,5 @@
+/test/serilog-enricher-middleware.test/project.lock.json
+/src/serilog-enricher-middleware/project.lock.json
+/.vs/serilog-enricher-middleware/v14/*.suo
+/src/serilog-enricher-middleware/*.user
+/test/serilog-enricher-middleware.test/*.user
