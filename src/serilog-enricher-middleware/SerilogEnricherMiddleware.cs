@@ -5,45 +5,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
+using Serilog.Context;
 
 namespace SerilogEnricher
 {
     public class SerilogEnricherMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly SerilogEnricherMiddlewareOptions _options;
 
-        public SerilogEnricherMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, SerilogEnricherMiddlewareOptions options)
+        public SerilogEnricherMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = loggerFactory.CreateLogger<SerilogEnricherMiddleware>();
-            _options = options;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            await context.Response.WriteAsync(_options.Message);
-            await _next(context);
-            
+            using (LogContext.PushProperties(new OperationEnricher(context), new IdentityEnricher(context)))
+            {
+                await _next.Invoke(context);
+            }
         }
     }
 
     public static class SerilogEnricherMiddlewareExtension
     {
-        public static IApplicationBuilder UseSerilogEnricherMiddleware(this IApplicationBuilder builder, SerilogEnricherMiddlewareOptions options)
+        public static IApplicationBuilder UseSerilogEnricherMiddleware(this IApplicationBuilder app)
         {
-            return builder.UseMiddleware<SerilogEnricherMiddleware>(options);
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            return app.UseMiddleware<SerilogEnricherMiddleware>();
         }
     }
 
-    public class SerilogEnricherMiddlewareOptions
-    {
-        public SerilogEnricherMiddlewareOptions()
-        {
-            Message = "hello from middleware";    
-        }
-
-        public string Message { get; set; }
-    }
 }

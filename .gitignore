@@ -3,3 +3,8 @@
 /.vs/serilog-enricher-middleware/v14/*.suo
 /src/serilog-enricher-middleware/*.user
 /test/serilog-enricher-middleware.test/*.user
+/src/serilog-enricher-middleware/bin/Debug/netstandard1.6
+/test/serilog-enricher-middleware.test/bin/Debug/netcoreapp1.1
+/test/serilog-enricher-middleware.test/obj/Debug/netcoreapp1.1
+/src/serilog-enricher-middleware/obj/Debug/netstandard1.6
+/.vs/restore.dg

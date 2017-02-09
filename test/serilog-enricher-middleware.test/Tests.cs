@@ -17,7 +17,7 @@ namespace SerilogEnricher.Tests
             var builder = new WebHostBuilder()
                 .Configure(app =>
                 {
-                    app.UseSerilogEnricherMiddleware(new SerilogEnricherMiddlewareOptions());
+                    app.UseSerilogEnricherMiddleware();
                     app.UseMiddleware<FakeMiddleware>(TimeSpan.FromMilliseconds(5));
                 });
 
