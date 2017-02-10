@@ -12,15 +12,17 @@ namespace SerilogEnricher
     public class SerilogEnricherMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IdentityEnricherOptions _options;
 
-        public SerilogEnricherMiddleware(RequestDelegate next)
+        public SerilogEnricherMiddleware(RequestDelegate next, IdentityEnricherOptions options)
         {
             _next = next;
+            _options = options;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            using (LogContext.PushProperties(new OperationEnricher(context), new IdentityEnricher(context)))
+            using (LogContext.PushProperties(new OperationEnricher(context), new IdentityEnricher(context,_options)))
             {
                 await _next.Invoke(context);
             }
@@ -34,7 +36,15 @@ namespace SerilogEnricher
             if (app == null)
                 throw new ArgumentNullException(nameof(app));
 
-            return app.UseMiddleware<SerilogEnricherMiddleware>();
+            return app.UseMiddleware<SerilogEnricherMiddleware>(new IdentityEnricherOptions());
+        }
+
+        public static IApplicationBuilder UseSerilogEnricherMiddleware(this IApplicationBuilder app, IdentityEnricherOptions identityEnricherOptions)
+        {
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            return app.UseMiddleware<SerilogEnricherMiddleware>(identityEnricherOptions);
         }
     }
 
