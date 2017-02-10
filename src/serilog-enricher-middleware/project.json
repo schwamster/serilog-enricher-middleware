@@ -1,11 +1,15 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "packOptions": {
+    "licenseUrl": "https://github.com/schwamster/serilog-enricher-middleware/blob/master/LICENSE.md",
+    "projectUrl": "https://github.com/schwamster/serilog-enricher-middleware"
+  },
   "dependencies": {
     "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
     "Microsoft.Extensions.Logging.Abstractions": "1.1.0",
     "NETStandard.Library": "1.6.1",
     "Serilog": "2.3.0",
-    "IdentityModel": "2.5.1" 
+    "IdentityModel": "2.5.1"
   },
   "frameworks": {
     "netstandard1.6": {
